@@ -1,868 +1,414 @@
-/*
- * Copyright (c) 2009,  Sarah Heckman, Laurie Williams, Dright Ho
- * All Rights Reserved.
- * 
- * Permission has been explicitly granted to the University of Minnesota 
- * Software Engineering Center to use and distribute this source for 
- * educational purposes, including delivering online education through
- * Coursera or other entities.  
- * 
- * No warranty is given regarding this software, including warranties as
- * to the correctness or completeness of this software, including 
- * fitness for purpose.
- * 
- * 
- * Modifications 
- * 20171114 - Ian De Silva - Updated to comply with JUnit 4 and to adhere to 
- * 							 coding standards.  Added test documentation.
- */
 package edu.ncsu.csc326.coffeemaker;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.ncsu.csc326.coffeemaker.exceptions.InventoryException;
-import edu.ncsu.csc326.coffeemaker.exceptions.RecipeException;
-
-/**
- * Unit tests for CoffeeMaker class.
- * 
- * @author Sarah Heckman
- */
 public class CoffeeMakerTest {
-	
-	/**
-	 * The object under test.
-	 */
-	private CoffeeMaker coffeeMaker;
-	
-	// Sample recipes to use in testing.
-	private Recipe recipe1;
-	private Recipe recipe2;
-	private Recipe recipe3;
-	private Recipe recipe4;
-	private Recipe recipe5;
-	private Recipe recipe6;
-	private Recipe recipe7;
-
-	/**
-	 * Initializes some recipes to test with and the {@link CoffeeMaker} 
-	 * object we wish to test.
-	 * 
-	 * @throws RecipeException  if there was an error parsing the ingredient 
-	 * 		amount when setting up the recipe.
-	 */
-	@Before
-	public void setUp() throws RecipeException {
-		coffeeMaker = new CoffeeMaker();
-		
-		//Set up for r1
-		recipe1 = new Recipe();
-		recipe1.setName("Coffee");
-		recipe1.setAmtChocolate("0");
-		recipe1.setAmtCoffee("3");
-		recipe1.setAmtMilk("1");
-		recipe1.setAmtSugar("1");
-		recipe1.setPrice("50");
-		
-		//Set up for r2
-		recipe2 = new Recipe();
-		recipe2.setName("Mocha");
-		recipe2.setAmtChocolate("20");
-		recipe2.setAmtCoffee("3");
-		recipe2.setAmtMilk("1");
-		recipe2.setAmtSugar("1");
-		recipe2.setPrice("75");
-		
-		//Set up for r3
-		recipe3 = new Recipe();
-		recipe3.setName("Latte");
-		recipe3.setAmtChocolate("0");
-		recipe3.setAmtCoffee("3");
-		recipe3.setAmtMilk("3");
-		recipe3.setAmtSugar("1");
-		recipe3.setPrice("100");
-		
-		//Set up for r4
-		recipe4 = new Recipe();
-		recipe4.setName("Hot Chocolate");
-		recipe4.setAmtChocolate("4");
-		recipe4.setAmtCoffee("0");
-		recipe4.setAmtMilk("1");
-		recipe4.setAmtSugar("1");
-		recipe4.setPrice("65");
-
-		//Set up for r5
-		recipe5 = new Recipe();
-		recipe5.setName("Custom");
-		recipe5.setAmtChocolate("4");
-		recipe5.setAmtCoffee("0");
-		recipe5.setAmtMilk("1");
-		recipe5.setAmtSugar("30");
-		recipe5.setPrice("65");
-
-		//Set up for r6
-		recipe6 = new Recipe();
-		recipe6.setName("Custom");
-		recipe6.setAmtChocolate("4");
-		recipe6.setAmtCoffee("0");
-		recipe6.setAmtMilk("30");
-		recipe6.setAmtSugar("1");
-		recipe6.setPrice("65");
-
-		//Set up for r7
-		recipe7 = new Recipe();
-		recipe7.setName("Custom");
-		recipe7.setAmtChocolate("4");
-		recipe7.setAmtCoffee("30");
-		recipe7.setAmtMilk("0");
-		recipe7.setAmtSugar("1");
-		recipe7.setPrice("65");
-	}
-	
-
-	/** UC5: ADD INVENTORY */
-	
-	/**
-	 * Given a coffee maker with the default inventory
-	 * When we add inventory with well-formed quantities
-	 * Then we do not get an exception trying to read the inventory quantities.
-	 * 
-	 * @throws InventoryException  if there was an error parsing the quanity
-	 * 		to a positive integer.
-	 */
-	@Test
-	public void testAddInventory() throws InventoryException {
-		coffeeMaker.addInventory("4","7","0","9");
-	}
-	
-	/**
-	 * Given a coffee maker with the default inventory
-	 * When we add inventory with malformed quantity for amtCoffee
-	 * Then we get an inventory exception
-	 * 
-	 * @throws InventoryException  if there was an error parsing the quanity
-	 * 		to a positive integer.
-	 */
-	@Test(expected = InventoryException.class)
-	public void testAddInventoryExceptionCoffee() throws InventoryException {
-		coffeeMaker.addInventory("-4", "1", "2", "3");
-	}
-
-	/**
-	 * Given a coffee maker with the default inventory
-	 * When we add inventory with malformed quantity for amtCoffee
-	 * Then we get an inventory exception
-	 * 
-	 * @throws InventoryException  if there was an error parsing the quanity
-	 * 		to a positive integer.
-	 */
-	@Test(expected = InventoryException.class)
-	public void testAddInventoryExceptionCoffeeAlp() throws InventoryException {
-		coffeeMaker.addInventory("ll", "1", "2", "3");
-	}
-
-	/**
-	 * Given a coffee maker with the default inventory
-	 * When we add inventory with malformed quantity for amtMilk
-	 * Then we get an inventory exception
-	 * 
-	 * @throws InventoryException  if there was an error parsing the quanity
-	 * 		to a positive integer.
-	 */
-	@Test(expected = InventoryException.class)
-	public void testAddInventoryExceptionMilk() throws InventoryException {
-		coffeeMaker.addInventory("4", "-1", "2", "3");
-	}
-
-	/**
-	 * Given a coffee maker with the default inventory
-	 * When we add inventory with malformed quantity for amtMilk
-	 * Then we get an inventory exception
-	 * 
-	 * @throws InventoryException  if there was an error parsing the quanity
-	 * 		to a positive integer.
-	 */
-	@Test(expected = InventoryException.class)
-	public void testAddInventoryExceptionMilkAlp() throws InventoryException {
-		coffeeMaker.addInventory("4", "pop", "2", "3");
-	}
-
-	/**
-	 * Given a coffee maker with the default inventory
-	 * When we add inventory with malformed quantity for amtSugar
-	 * Then we get an inventory exception
-	 * 
-	 * @throws InventoryException  if there was an error parsing the quanity
-	 * 		to a positive integer.
-	 */
-	@Test(expected = InventoryException.class)
-	public void testAddInventoryExceptionSugar() throws InventoryException {
-		coffeeMaker.addInventory("4", "1", "-2", "3");
-	}
-
-	/**
-	 * Given a coffee maker with the default inventory
-	 * When we add inventory with malformed quantity for amtSugar
-	 * Then we get an inventory exception
-	 * 
-	 * @throws InventoryException  if there was an error parsing the quanity
-	 * 		to a positive integer.
-	 */
-	@Test(expected = InventoryException.class)
-	public void testAddInventoryExceptionSugarAlp() throws InventoryException {
-		coffeeMaker.addInventory("4", "1", "lp", "3");
-	}
-
-	/**
-	 * Given a coffee maker with the default inventory
-	 * When we add inventory with malformed quantity for amtChocolate
-	 * Then we get an inventory exception
-	 * 
-	 * @throws InventoryException  if there was an error parsing the quanity
-	 * 		to a positive integer.
-	 */
-	@Test(expected = InventoryException.class)
-	public void testAddInventoryExceptionChocolate() throws InventoryException {
-		coffeeMaker.addInventory("4", "1", "2", "-3");
-	}
-
-	/**
-	 * Given a coffee maker with the default inventory
-	 * When we add inventory with malformed quantity for amtChocolate
-	 * Then we get an inventory exception
-	 * 
-	 * @throws InventoryException  if there was an error parsing the quanity
-	 * 		to a positive integer.
-	 */
-	@Test(expected = InventoryException.class)
-	public void testAddInventoryExceptionChocolateAlp() throws InventoryException {
-		coffeeMaker.addInventory("4", "1", "2", "aa");
-	}
-
-
-	/** UC6: CHECK INVENTORY */
-	/**
-	 * Given a coffee maker
-	 * When we check inventory
-	 * Then we get a string representation of the default inventory
-	 */
-	@Test
-	public void testCheckInventory() {
-		
-		StringBuffer buf = new StringBuffer();
-    	buf.append("Coffee: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Milk: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Sugar: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Chocolate: ");
-    	buf.append(15);
-    	buf.append("\n");
-		
-		
-		assertEquals(buf.toString(), coffeeMaker.checkInventory());
-	}
-
-	/**
-	 * Given a coffee maker
-	 * When we check inventory after adding some Milk (5)
-	 * Then we get a string representation of the new inventory
-	 */
-	@Test
-	public void testCheckInventoryMilk() throws InventoryException {
-		
-		coffeeMaker.addInventory("0", "5", "0", "0");
-
-		StringBuffer buf = new StringBuffer();
-    	buf.append("Coffee: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Milk: ");
-    	buf.append(15+5);
-    	buf.append("\n");
-    	buf.append("Sugar: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Chocolate: ");
-    	buf.append(15);
-    	buf.append("\n");
-		
-		
-		assertEquals(buf.toString(), coffeeMaker.checkInventory());
-	}
-
-	/**
-	 * Given a coffee maker
-	 * When we check inventory after adding some Sugar (5)
-	 * Then we get a string representation of the new inventory
-	 */
-	@Test
-	public void testCheckInventorySugar() throws InventoryException {
-		
-		coffeeMaker.addInventory("0", "0", "5", "0");
-
-		StringBuffer buf = new StringBuffer();
-    	buf.append("Coffee: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Milk: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Sugar: ");
-    	buf.append(15+5);
-    	buf.append("\n");
-    	buf.append("Chocolate: ");
-    	buf.append(15);
-    	buf.append("\n");
-		
-		
-		assertEquals(buf.toString(), coffeeMaker.checkInventory());
-	}
-
-	/**
-	 * Given a coffee maker
-	 * When we check inventory after adding some Chocolate (5)
-	 * Then we get a string representation of the new inventory
-	 */
-	@Test
-	public void testCheckInventoryChoco() throws InventoryException {
-		
-		coffeeMaker.addInventory("0", "0", "0", "5");
-
-		StringBuffer buf = new StringBuffer();
-    	buf.append("Coffee: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Milk: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Sugar: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Chocolate: ");
-    	buf.append(15+5);
-    	buf.append("\n");
-		
-		
-		assertEquals(buf.toString(), coffeeMaker.checkInventory());
-	}
-
-	/**
-	 * Given a coffee maker
-	 * When we check inventory after adding some Coffee (5)
-	 * Then we get a string representation of the new inventory
-	 */
-	@Test
-	public void testCheckInventoryCoffee() throws InventoryException {
-		
-		coffeeMaker.addInventory("5", "0", "0", "0");
-
-		StringBuffer buf = new StringBuffer();
-    	buf.append("Coffee: ");
-    	buf.append(15+5);
-    	buf.append("\n");
-    	buf.append("Milk: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Sugar: ");
-    	buf.append(15);
-    	buf.append("\n");
-    	buf.append("Chocolate: ");
-    	buf.append(15);
-    	buf.append("\n");
-		
-		
-		assertEquals(buf.toString(), coffeeMaker.checkInventory());
-	}
-
-
-
-
-	/** UC7: PURCHASE BEVERAGE */
-	
-	/**
-	 * Given a coffee maker with one valid recipe
-	 * When we make coffee, selecting the valid recipe and paying more than 
-	 * 		the coffee costs
-	 * Then we get the correct change back.
-	 */
-	@Test
-	public void testMakeCoffee() {
-		coffeeMaker.addRecipe(recipe1);
-		assertEquals(25, coffeeMaker.makeCoffee(0, 75));
-	}
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, selecting the 3rd recipe and paying more than 
-	 * 		the coffee costs
-	 * Then we get the correct change back.
-	 */
-	@Test
-	public void testMakeCoffeeMultipleTrue() {
-		coffeeMaker.addRecipe(recipe1);
-		coffeeMaker.addRecipe(recipe2);
-		coffeeMaker.addRecipe(recipe3);
-		assertEquals(75, coffeeMaker.makeCoffee(2, 175));
-	}
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, selecting the 2nd recipe and paying less than 
-	 * 		the coffee costs
-	 * Then we get the amount paid back.
-	 */
-	@Test
-	public void testMakeCoffeeMultipleFalse() {
-		coffeeMaker.addRecipe(recipe1);
-		coffeeMaker.addRecipe(recipe4);
-		coffeeMaker.addRecipe(recipe3);
-		assertEquals(5, coffeeMaker.makeCoffee(1, 5));
-	}
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, selecting the 1st recipe and paying the exact 
-	 * 		amount the coffee costs
-	 * Then we get the nothing back.
-	 */
-	@Test
-	public void testMakeCoffeeMultiple() {
-		coffeeMaker.addRecipe(recipe1);
-		coffeeMaker.addRecipe(recipe2);
-		coffeeMaker.addRecipe(recipe3);
-		assertEquals(0, coffeeMaker.makeCoffee(0, 50));
-	}
-
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, selecting the 2nd recipe which requires (20,3,1,1)
-	 * 		with the default inventory (15, 15, 15, 15)
-	 * Then we get the money back.
-	 */
-	@Test
-	public void testMakeCoffeeInventoryFalse() {
-		coffeeMaker.addRecipe(recipe1);
-		coffeeMaker.addRecipe(recipe2);
-		coffeeMaker.addRecipe(recipe3);
-		assertEquals(100, coffeeMaker.makeCoffee(1, 100));
-	}
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, selecting the valid recipe which requires (4,0,30,1)
-	 * 		with the default inventory (15, 15, 15, 15)
-	 * Then we get the money back.
-	 */
-	@Test
-	public void testMakeCoffeeInventoryFalse6() {
-		coffeeMaker.addRecipe(recipe6);
-		assertEquals(100, coffeeMaker.makeCoffee(0, 100));
-	}
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, selecting the valid recipe which requires (4,30,0,1)
-	 * 		with the default inventory (15, 15, 15, 15)
-	 * Then we get the money back.
-	 */
-	@Test
-	public void testMakeCoffeeInventoryFalse7() {
-		coffeeMaker.addRecipe(recipe7);
-		assertEquals(100, coffeeMaker.makeCoffee(0, 100));
-	}
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, selecting the valid recipe which requires (4,0,1,30)
-	 * 		with the default inventory (15, 15, 15, 15)
-	 * Then we get the money back.
-	 */
-	@Test
-	public void testMakeCoffeeInventoryFalse2() {
-		coffeeMaker.addRecipe(recipe5);
-		assertEquals(100, coffeeMaker.makeCoffee(0, 100));
-	}
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, selecting the 2nd recipe which requires (20,3,1,1)
-	 * 		with the extra chocolate (20) added to the default 
-	 * 		inventory to yield (35, 15, 15, 15)
-	 * Then we get the money back.
-	 */
-	@Test
-	public void testMakeCoffeeInventoryTrue() throws InventoryException {
-		coffeeMaker.addInventory("0", "0", "0", "20");
-		coffeeMaker.addRecipe(recipe1);
-		coffeeMaker.addRecipe(recipe2);
-		coffeeMaker.addRecipe(recipe3);
-		assertEquals(25, coffeeMaker.makeCoffee(1, 100));
-	}
-
-	/**
-	 * Given a coffee maker with no valid recipes
-	 * When we try to make coffee
-	 * Then we get the money back.
-	 */
-	@Test
-	public void testMakeCoffeeInventoryFalse3() {
-		assertEquals(100, coffeeMaker.makeCoffee(0, 100));
-	}
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, if we specify a negative recipe index
-	 * Then we get the money back.
-	 */
-	@Test
-	public void testMakeCoffeeInventoryFalse4() {
-		coffeeMaker.addRecipe(recipe5);
-		assertEquals(100, coffeeMaker.makeCoffee(-1, 100));
-	}
-
-	/**
-	 * Given a coffee maker with 3 valid recipes
-	 * When we make coffee, if we specify an invalid recipe index
-	 * Then we get the money back.
-	 */
-	@Test
-	public void testMakeCoffeeInventoryFalse5() {
-		coffeeMaker.addRecipe(recipe5);
-		assertEquals(100, coffeeMaker.makeCoffee(10, 100));
-	}
-
-
-
-	/** UC2: ADD RECIPE */
-
-	/**
-	 * Given a coffee maker with no recipes
-	 * When we add a valid recipe
-	 * Then we get a coffee maker with one recipe.
-	 */
-	@Test
-	public void testMakeCoffeeAddRecipe1() {
-		coffeeMaker.addRecipe(recipe1);
-		assertNotEquals(null, coffeeMaker.getRecipes()[0]);
-	}
-
-	/**
-	 * Given a coffee maker with no recipes
-	 * When we add 3 valid recipes
-	 * Then we get a coffee maker with 3 recipes.
-	 */
-	@Test
-	public void testMakeCoffeeAddRecipe2() {
-		coffeeMaker.addRecipe(recipe1);
-		coffeeMaker.addRecipe(recipe2);
-		coffeeMaker.addRecipe(recipe3);
-		assertNotEquals(null, coffeeMaker.getRecipes()[0]);
-		assertNotEquals(null, coffeeMaker.getRecipes()[1]);
-		assertNotEquals(null, coffeeMaker.getRecipes()[2]);
-	}
-
-	/**
-	 * Given a coffee maker with no recipes
-	 * When we add a recipe with the same name as an existing one
-	 * Then we get a false response.
-	 */
-	@Test
-	public void testMakeCoffeeAddRecipe3() {
-		coffeeMaker.addRecipe(recipe3);
-		Recipe recipe= new Recipe();
-		recipe.setName(recipe3.getName());
-		assertEquals(false, coffeeMaker.addRecipe(recipe));
-	}
-
-
-	/** UC3: DELETE RECIPE */
-
-	/**
-	 * Given a coffee maker with no recipes
-	 * When we add a valid recipe and then delete the recipe
-	 * Then we get a coffee maker with no recipes.
-	 */
-	@Test
-	public void testMakeCoffeeDeleteRecipe1() {
-		coffeeMaker.addRecipe(recipe1);
-		coffeeMaker.deleteRecipe(0);
-		assertEquals(null, coffeeMaker.getRecipes()[0]);
-	}
-
-	/**
-	 * Given a coffee maker with no recipes
-	 * When we delete a recipe
-	 * Then we get a null response.
-	 */
-	@Test
-	public void testMakeCoffeeDeleteRecipe2() {
-		assertEquals(null, coffeeMaker.deleteRecipe(0));
-	}
-
-	/**
-	 * Given a coffee maker with no recipes
-	 * When we delete a recipe with an invalid index
-	 * Then we get a null response.
-	 */
-	@Test
-	public void testMakeCoffeeDeleteRecipe3() {
-		assertEquals(null, coffeeMaker.deleteRecipe(-1));
-	}
-
-
-	/** UC4: EDIT RECIPE */
-
-	/**
-	 * Given a coffee maker with no recipes
-	 * When we add a valid recipe and then edit the recipe
-	 * Then we get a coffee maker with a recipe corresponding to the new data.
-	 */
-	@Test
-	public void testMakeCoffeeEditRecipe1() {
-		coffeeMaker.addRecipe(recipe1);
-		coffeeMaker.editRecipe(0, recipe2);
-		assertEquals(recipe2.getPrice(), coffeeMaker.getRecipes()[0].getPrice());
-	}
-
-	/**
-	 * Given a coffee maker with no recipes
-	 * When we edit a recipe
-	 * Then we get a null response.
-	 */
-	@Test
-	public void testMakeCoffeeEditRecipe2() {
-		assertEquals(null, coffeeMaker.editRecipe(0, recipe2));
-	}
-
-	/**
-	 * Given a coffee maker with no recipes
-	 * When we edit a recipe with an invalid index
-	 * Then we get a null response.
-	 */
-	@Test
-	public void testMakeCoffeeEditRecipe3() {
-		assertEquals(null, coffeeMaker.editRecipe(-1, recipe2));
-	}
-
-	
-	/** OTHER CLASSES */
-	/**
-	 * When we create a recipe with an invalid price
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe1() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("0");
-		recipe.setAmtCoffee("3");
-		recipe.setAmtMilk("1");
-		recipe.setAmtSugar("1");
-		recipe.setPrice("-50");
-	}
-
-	/**
-	 * When we create a recipe with an invalid entry
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe2() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("0");
-		recipe.setAmtCoffee("3");
-		recipe.setAmtMilk("1");
-		recipe.setAmtSugar("-1");
-		recipe.setPrice("50");
-	}
-
-	/**
-	 * When we create a recipe with an invalid entry
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe3() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("0");
-		recipe.setAmtCoffee("3");
-		recipe.setAmtMilk("-1");
-		recipe.setAmtSugar("1");
-		recipe.setPrice("50");
-	}
-
-	/**
-	 * When we create a recipe with an invalid entry
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe4() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("0");
-		recipe.setAmtCoffee("-3");
-		recipe.setAmtMilk("1");
-		recipe.setAmtSugar("1");
-		recipe.setPrice("50");
-	}
-
-	/**
-	 * When we create a recipe with an invalid entry
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe5() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("-10");
-		recipe.setAmtCoffee("3");
-		recipe.setAmtMilk("1");
-		recipe.setAmtSugar("1");
-		recipe.setPrice("50");
-	}
-
-	/**
-	 * When we create a recipe with an invalid entry
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe6() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("0");
-		recipe.setAmtCoffee("3");
-		recipe.setAmtMilk("1");
-		recipe.setAmtSugar("1");
-		recipe.setPrice("abc");
-	}
-
-	/**
-	 * When we create a recipe with an invalid entry
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe7() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("aa");
-		recipe.setAmtCoffee("3");
-		recipe.setAmtMilk("1");
-		recipe.setAmtSugar("1");
-		recipe.setPrice("50");
-	}
-
-	/**
-	 * When we create a recipe with an invalid entry
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe8() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("0");
-		recipe.setAmtCoffee("bb");
-		recipe.setAmtMilk("1");
-		recipe.setAmtSugar("1");
-		recipe.setPrice("50");
-	}
-
-	/**
-	 * When we create a recipe with an invalid entry
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe9() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("0");
-		recipe.setAmtCoffee("3");
-		recipe.setAmtMilk("bb");
-		recipe.setAmtSugar("1");
-		recipe.setPrice("50");
-	}
-
-	/**
-	 * When we create a recipe with an invalid entry
-	 * Then we get a RecipeException.
-	 */
-	@Test(expected = RecipeException.class)
-	public void testCreateRecipe10() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-		recipe.setAmtChocolate("0");
-		recipe.setAmtCoffee("3");
-		recipe.setAmtMilk("1");
-		recipe.setAmtSugar("bb");
-		recipe.setPrice("50");
-	}
-
-	/**
-	 * When we compare 2 recipes with the same name
-	 * Then we get an true response.
-	 */
-	@Test
-	public void testCreateRecipe11() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Coffee");
-
-		assertEquals(true, recipe1.equals(recipe));
-	}
-
-	/**
-	 * When we compare 2 recipes with different names
-	 * Then we get an false response.
-	 */
-	@Test
-	public void testCreateRecipe12() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Mocha");
-
-		assertEquals(false, recipe1.equals(recipe));
-	}
-	
-
-	/**
-	 * When we compare 2 recipes with different names
-	 * Then we get an false response.
-	 */
-	@Test
-	public void testCreateRecipe13() throws RecipeException {
-		Recipe recipe = new Recipe();
-
-		assertEquals(false, recipe1.equals(recipe));
-	}
-
-	/**
-	 * When we compare 2 recipes with different names
-	 * Then we get an false response.
-	 */
-	@Test
-	public void testCreateRecipe14() throws RecipeException {
-		Recipe recipe = new Recipe();
-
-		assertEquals(false, recipe.equals(recipe1));
-	}
-
-	/**
-	 * When we check a recipe's name
-	 * Then we get back the assigned name.
-	 */
-	@Test
-	public void testCreateRecipe15() throws RecipeException {
-		Recipe recipe = new Recipe();
-		recipe.setName("Mocha");
-
-		assertEquals("Mocha", recipe.toString());
-	}
 
+    /**
+     * The object under test.
+     */
+    private CoffeeMaker coffeeMaker;
+
+    // Sample recipes to use in testing.
+    private Recipe recipe1;
+    private Recipe recipe2;
+    private Recipe recipe3;
+    private Recipe recipe4;
+    private Recipe recipe5;
+    private Recipe recipe6;
+    private Recipe recipe7;
+
+    @Before
+    public void setUp() throws RecipeException {
+        coffeeMaker = new CoffeeMaker();
+
+        // Set up for recipe1: (Coffee: 3, Milk: 1, Sugar: 1, Chocolate: 0, Price: 50)
+        recipe1 = new Recipe();
+        recipe1.setName("Coffee");
+        recipe1.setAmtCoffee("3");
+        recipe1.setAmtMilk("1");
+        recipe1.setAmtSugar("1");
+        recipe1.setAmtChocolate("0");
+        recipe1.setPrice("50");
+
+        // Set up for recipe2: (Coffee: 4, Milk: 2, Sugar: 1, Chocolate: 0, Price: 75)
+        recipe2 = new Recipe();
+        recipe2.setName("Mocha");
+        recipe2.setAmtCoffee("4");
+        recipe2.setAmtMilk("2");
+        recipe2.setAmtSugar("1");
+        recipe2.setAmtChocolate("0");
+        recipe2.setPrice("75");
+
+        // Set up for recipe3: (Coffee: 4, Milk: 0, Sugar: 1, Chocolate: 1, Price: 100)
+        recipe3 = new Recipe();
+        recipe3.setName("HotChocolate");
+        recipe3.setAmtCoffee("4");
+        recipe3.setAmtMilk("0");
+        recipe3.setAmtSugar("1");
+        recipe3.setAmtChocolate("1");
+        recipe3.setPrice("100");
+
+        // Set up for recipe4: (Coffee: 0, Milk: 1, Sugar: 1, Chocolate: 4, Price: 65)
+        recipe4 = new Recipe();
+        recipe4.setName("ChocoDelight");
+        recipe4.setAmtCoffee("0");
+        recipe4.setAmtMilk("1");
+        recipe4.setAmtSugar("1");
+        recipe4.setAmtChocolate("4");
+        recipe4.setPrice("65");
+
+        // For testing “same name” or “edit” behavior:
+        recipe5 = new Recipe();
+        recipe5.setName("Duplicate");
+        recipe5.setAmtCoffee("1");
+        recipe5.setAmtMilk("1");
+        recipe5.setAmtSugar("1");
+        recipe5.setAmtChocolate("1");
+        recipe5.setPrice("10");
+
+        // For testing editing out‐of‐bounds, negative values, etc.
+        recipe6 = new Recipe();
+        recipe6.setName("EditTest");
+        recipe6.setAmtCoffee("2");
+        recipe6.setAmtMilk("2");
+        recipe6.setAmtSugar("2");
+        recipe6.setAmtChocolate("2");
+        recipe6.setPrice("20");
+
+        // Another “new” recipe for replacing during edit
+        recipe7 = new Recipe();
+        recipe7.setName("Replacement");
+        recipe7.setAmtCoffee("3");
+        recipe7.setAmtMilk("3");
+        recipe7.setAmtSugar("3");
+        recipe7.setAmtChocolate("3");
+        recipe7.setPrice("30");
+    }
+
+    // ===========================================
+    // UC1: ADD RECIPE
+    // ===========================================
+
+    /**
+     * Test that we can add up to 3 distinct recipes. The return value should
+     * be true for the first three calls; false on the fourth.
+     */
+    @Test
+    public void testAddUpToThreeRecipes() {
+        assertTrue(coffeeMaker.addRecipe(recipe1));
+        assertTrue(coffeeMaker.addRecipe(recipe2));
+        assertTrue(coffeeMaker.addRecipe(recipe3));
+
+        // Fourth one should fail (only 3 slots).
+        assertFalse(coffeeMaker.addRecipe(recipe4));
+    }
+
+    /**
+     * If we try to add a recipe whose name already exists, addRecipe should
+     * return false, even if there is a free slot.
+     */
+    @Test
+    public void testAddRecipeSameNameFails() throws RecipeException {
+        Recipe rA = new Recipe();
+        rA.setName("Alpha");
+        rA.setAmtCoffee("1");
+        rA.setAmtMilk("1");
+        rA.setAmtSugar("1");
+        rA.setAmtChocolate("1");
+        rA.setPrice("10");
+
+        Recipe rB = new Recipe();
+        rB.setName("Alpha");  // same name
+        rB.setAmtCoffee("2");
+        rB.setAmtMilk("2");
+        rB.setAmtSugar("2");
+        rB.setAmtChocolate("2");
+        rB.setPrice("20");
+
+        assertTrue(coffeeMaker.addRecipe(rA));
+        // Even though slot 1 is free, name duplicates, so should return false.
+        assertFalse(coffeeMaker.addRecipe(rB));
+    }
+
+    // ===========================================
+    // UC2: EDIT RECIPE
+    // ===========================================
+
+    /**
+     * If we edit a valid recipe index, editRecipe should return the old
+     * recipe’s name, and slot should be replaced with the new recipe.
+     */
+    @Test
+    public void testEditRecipeSuccess() {
+        coffeeMaker.addRecipe(recipe1);         // slot 0
+        coffeeMaker.addRecipe(recipe5);         // slot 1
+
+        // Replace slot 1 (name="Duplicate") with recipe7
+        String oldName = coffeeMaker.editRecipe(1, recipe7);
+        assertEquals("Duplicate", oldName);     // editRecipe returns old name
+
+        Recipe[] arr = coffeeMaker.getRecipes();
+        assertEquals("Replacement", arr[1].getName());
+        assertEquals(3, arr[1].getAmtCoffee());
+        assertEquals(3, arr[1].getAmtMilk());
+        assertEquals(3, arr[1].getAmtSugar());
+        assertEquals(3, arr[1].getAmtChocolate());
+        assertEquals(30, arr[1].getPrice());
+    }
+
+    /**
+     * Editing a non‐existent index (e.g., -1 or >= 3) should return null
+     * and make no changes.
+     */
+    @Test
+    public void testEditRecipeInvalidIndex() {
+        coffeeMaker.addRecipe(recipe1);
+        // Out of bounds: index = 3
+        assertNull(coffeeMaker.editRecipe(3, recipe7));
+
+        // Negative index
+        assertNull(coffeeMaker.editRecipe(-1, recipe7));
+
+        // Slot 2 is still null, slot 1 is null, so they remain unchanged.
+        assertNull(coffeeMaker.getRecipes()[2]);
+        assertNull(coffeeMaker.getRecipes()[1]);
+    }
+
+    // ===========================================
+    // UC3: DELETE RECIPE
+    // ===========================================
+
+    /**
+     * Deleting an existing recipe should return the name, and the slot becomes null.
+     */
+    @Test
+    public void testDeleteRecipeSuccess() {
+        coffeeMaker.addRecipe(recipe1); // slot 0
+        String deleted = coffeeMaker.deleteRecipe(0);
+        assertEquals("Coffee", deleted);
+        assertNull(coffeeMaker.getRecipes()[0]);
+    }
+
+    /**
+     * If we delete at an invalid index (or an empty slot), deleteRecipe should return null.
+     */
+    @Test
+    public void testDeleteRecipeInvalidIndex() {
+        // No recipes in any slot yet
+        assertNull(coffeeMaker.deleteRecipe(0));
+        assertNull(coffeeMaker.deleteRecipe(2));
+        assertNull(coffeeMaker.deleteRecipe(-1));
+    }
+
+    // ===========================================
+    // UC4: ADD INVENTORY
+    // ===========================================
+
+    /**
+     * Adding well‐formed inventory should not throw; inventory should increment.
+     */
+    @Test
+    public void testAddInventoryNormal() throws InventoryException {
+        // Default inventory is (Coffee=15, Milk=15, Sugar=15, Chocolate=15)
+        coffeeMaker.addInventory("1", "2", "3", "4");
+
+        Inventory inv = coffeeMaker.checkInventory();
+        assertEquals(16, inv.getCoffee());      // 15 + 1
+        assertEquals(17, inv.getMilk());        // 15 + 2
+        assertEquals(18, inv.getSugar());       // 15 + 3
+        assertEquals(19, inv.getChocolate());   // 15 + 4
+    }
+
+    @Test(expected = InventoryException.class)
+    public void testAddInventoryNonNumericCoffee() throws InventoryException {
+        coffeeMaker.addInventory("a", "1", "1", "1");
+    }
+
+    @Test(expected = InventoryException.class)
+    public void testAddInventoryNegativeSugar() throws InventoryException {
+        coffeeMaker.addInventory("1", "1", "-5", "1");
+    }
+
+    @Test(expected = InventoryException.class)
+    public void testAddInventoryNonNumericMilk() throws InventoryException {
+        coffeeMaker.addInventory("1", "pop", "1", "1");
+    }
+
+    @Test(expected = InventoryException.class)
+    public void testAddInventoryNonNumericChocolate() throws InventoryException {
+        coffeeMaker.addInventory("1", "1", "1", "hi");
+    }
+
+    // ===========================================
+    // UC5: CHECK INVENTORY
+    // ===========================================
+
+    /**
+     * The default inventory, immediately after construction, should be all 15’s.
+     */
+    @Test
+    public void testCheckInventoryDefault() {
+        Inventory inv = coffeeMaker.checkInventory();
+        assertEquals(15, inv.getCoffee());
+        assertEquals(15, inv.getMilk());
+        assertEquals(15, inv.getSugar());
+        assertEquals(15, inv.getChocolate());
+    }
+
+    // ===========================================
+    // UC6: GET RECIPES
+    // ===========================================
+
+    /**
+     * After adding two recipes, getRecipes() should return an array in which
+     * exactly those two slots are non‐null.
+     */
+    @Test
+    public void testGetRecipesArrayContents() {
+        coffeeMaker.addRecipe(recipe1);
+        coffeeMaker.addRecipe(recipe2);
+
+        Recipe[] arr = coffeeMaker.getRecipes();
+        // Exactly two non‐null slots (0 and 1).
+        assertEquals("Coffee", arr[0].getName());
+        assertEquals("Mocha", arr[1].getName());
+        assertNull(arr[2]);
+    }
+
+    // ===========================================
+    // UC7: PURCHASE BEVERAGE
+    // ===========================================
+
+    /**
+     * Paying exactly the right amount: change should be 0, inventory decremented.
+     */
+    @Test
+    public void testMakeCoffeeExactFunds() {
+        coffeeMaker.addRecipe(recipe1);   // cost = 50
+        int change = coffeeMaker.makeCoffee(0, 50);
+        assertEquals(0, change);
+
+        // Inventory was (15,15,15,15); recipe1 uses (3,1,1,0):
+        Inventory invAfter = coffeeMaker.checkInventory();
+        assertEquals(12, invAfter.getCoffee());
+        assertEquals(14, invAfter.getMilk());
+        assertEquals(14, invAfter.getSugar());
+        assertEquals(15, invAfter.getChocolate());
+    }
+
+    /**
+     * Paying more than cost: change = paid – price, inventory decremented.
+     */
+    @Test
+    public void testMakeCoffeeMoreThanCost() {
+        coffeeMaker.addRecipe(recipe2);   // cost = 75
+        int change = coffeeMaker.makeCoffee(0, 100);
+        assertEquals(25, change);
+
+        Inventory invAfter = coffeeMaker.checkInventory();
+        assertEquals(11, invAfter.getCoffee());   // 15 – 4
+        assertEquals(13, invAfter.getMilk());     // 15 – 2
+        assertEquals(14, invAfter.getSugar());    // 15 – 1
+        assertEquals(15, invAfter.getChocolate());// 15 – 0
+    }
+
+    /**
+     * Insufficient funds: should return all money paid, inventory unchanged.
+     */
+    @Test
+    public void testMakeCoffeeInsufficientFunds() {
+        coffeeMaker.addRecipe(recipe3);   // cost = 100
+        Inventory before = coffeeMaker.checkInventory();
+        int change = coffeeMaker.makeCoffee(0, 50);
+        assertEquals(50, change);
+
+        // Inventory must be unchanged
+        Inventory after = coffeeMaker.checkInventory();
+        assertEquals(before.getCoffee(), after.getCoffee());
+        assertEquals(before.getMilk(), after.getMilk());
+        assertEquals(before.getSugar(), after.getSugar());
+        assertEquals(before.getChocolate(), after.getChocolate());
+    }
+
+    /**
+     * Trying to buy with a recipe index that’s empty or out of range:
+     * should return the entire amount back.
+     */
+    @Test
+    public void testMakeCoffeeInvalidIndex() {
+        // No recipes at all yet
+        int change = coffeeMaker.makeCoffee(2, 60);
+        assertEquals(60, change);
+
+        // Put one in slot 0, but ask for slot 1
+        coffeeMaker.addRecipe(recipe1);
+        change = coffeeMaker.makeCoffee(1, 100);
+        assertEquals(100, change);
+    }
+
+    /**
+     * Inventory not sufficient for that recipe: entire payment returned.
+     */
+    @Test
+    public void testMakeCoffeeInsufficientInventory() {
+        // Create a recipe that uses 20 coffee but inventory only has 15
+        Recipe bigCoffee = new Recipe();
+        bigCoffee.setName("TooBig");
+        bigCoffee.setAmtCoffee("20");   // more than stock
+        bigCoffee.setAmtMilk("0");
+        bigCoffee.setAmtSugar("0");
+        bigCoffee.setAmtChocolate("0");
+        bigCoffee.setPrice("50");
+
+        coffeeMaker.addRecipe(bigCoffee);
+        // Even if we pay 100, we cannot make it. Should return full 100, no inventory change.
+        Inventory before = coffeeMaker.checkInventory();
+        int change = coffeeMaker.makeCoffee(0, 100);
+        assertEquals(100, change);
+
+        Inventory after = coffeeMaker.checkInventory();
+        assertEquals(before.getCoffee(), after.getCoffee());
+        assertEquals(before.getMilk(), after.getMilk());
+        assertEquals(before.getSugar(), after.getSugar());
+        assertEquals(before.getChocolate(), after.getChocolate());
+    }
+
+    /**
+     * Multiple recipes present: selecting the “third” recipe must work correctly.
+     */
+    @Test
+    public void testMakeCoffeeMultipleRecipes() {
+        coffeeMaker.addRecipe(recipe1); // slot 0, cost=50
+        coffeeMaker.addRecipe(recipe2); // slot 1, cost=75
+        coffeeMaker.addRecipe(recipe4); // slot 2, cost=65
+
+        // Buy slot 2 with 100 → change = 35, inventory deducted appropriately.
+        int change = coffeeMaker.makeCoffee(2, 100);
+        assertEquals(35, change);
+
+        // recipe4 uses (0 coffee, 1 milk, 1 sugar, 4 chocolate)
+        Inventory inv = coffeeMaker.checkInventory();
+        assertEquals(15, inv.getCoffee());      // still 15
+        assertEquals(14, inv.getMilk());        // 15 – 1
+        assertEquals(14, inv.getSugar());       // 15 – 1
+        assertEquals(11, inv.getChocolate());   // 15 – 4
+    }
+
+    // ===========================================
+    // UC8: RECIPE NAMES (toString)
+    // ===========================================
+
+    /**
+     * A Recipe’s toString() should return its name.
+     */
+    @Test
+    public void testRecipeToStringReturnsName() throws RecipeException {
+        Recipe r = new Recipe();
+        r.setName("Cappuccino");
+        assertEquals("Cappuccino", r.toString());
+    }
 }
