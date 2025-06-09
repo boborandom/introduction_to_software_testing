@@ -1,7 +1,12 @@
+package edu.ncsu.csc326.coffeemaker;
+
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import edu.ncsu.csc326.coffeemaker.exceptions.InventoryException;
+import edu.ncsu.csc326.coffeemaker.exceptions.RecipeException;
 
 public class CoffeeMakerTest {
 
@@ -12,10 +17,8 @@ public class CoffeeMakerTest {
 
     @Before
     public void setUp() throws RecipeException {
-        // 1) Create a fresh CoffeeMaker
         coffeeMaker = new CoffeeMaker();
 
-        // 2) Build three simple recipes
         recipe1 = new Recipe();
         recipe1.setName("Coffee");
         recipe1.setAmtCoffee(3);
@@ -37,62 +40,53 @@ public class CoffeeMakerTest {
         recipe3.setAmtSugar(1);
         recipe3.setAmtChocolate(0);
 
-        // 3) Add them to the CoffeeMaker
         coffeeMaker.addRecipe(recipe1);
         coffeeMaker.addRecipe(recipe2);
         coffeeMaker.addRecipe(recipe3);
     }
 
     @Test
-    public void testAddInventoryValid() {
-        // start with default inventory, add some
+    public void testAddInventoryValid() throws InventoryException {
         String result = coffeeMaker.addInventory("3", "3", "0", "1");
         assertEquals("Inventory successfully added", result);
     }
 
     @Test(expected = InventoryException.class)
     public void testAddInventoryInvalid() throws InventoryException {
-        // negative input should throw
         coffeeMaker.addInventory("-1", "0", "0", "0");
     }
 
     @Test
     public void testMakeCoffeeExactChange() {
-        // price of recipe1 = (3*Coffee +1*Milk +1*Sugar) = 35 cents
         int price = recipe1.getPrice();
         int change = coffeeMaker.makeCoffee(0, price);
         assertEquals(0, change);
-        // inventory should have been reduced
         assertEquals(14, coffeeMaker.checkInventory().getCoffee());
     }
 
     @Test
     public void testMakeCoffeeNotEnoughMoney() {
-        int change = coffeeMaker.makeCoffee(1, 10);  // recipe2 costs more than 10
+        int change = coffeeMaker.makeCoffee(1, 10);
         assertEquals(10, change);
-        // inventory remains unchanged
         assertEquals(15, coffeeMaker.checkInventory().getMilk());
     }
 
     @Test
     public void testAddRecipeDuplicateName() {
         Recipe dup = new Recipe();
-        dup.setName("Coffee");  // same as recipe1
+        dup.setName("Coffee");
         dup.setAmtCoffee(1);
         dup.setAmtMilk(1);
         dup.setAmtSugar(1);
         dup.setAmtChocolate(1);
 
-        boolean added = coffeeMaker.addRecipe(dup);
-        assertFalse("Should reject duplicate recipe names", added);
+        assertFalse(coffeeMaker.addRecipe(dup));
     }
 
     @Test
     public void testDeleteRecipe() {
-        // remove recipe2
         Recipe deleted = coffeeMaker.deleteRecipe(1);
         assertEquals("Mocha", deleted.getName());
-        // slot should now be empty
         assertNull(coffeeMaker.getRecipes()[1]);
     }
 }
